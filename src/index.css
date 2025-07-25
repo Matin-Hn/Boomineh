@@ -2,41 +2,75 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+/* Persian Art Gallery Design System - RedBoom Gallery
+Inspired by Persian miniature paintings and modern gallery aesthetics
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Warm gallery background inspired by Persian art */
+    --background: 35 25% 97%;
+    --foreground: 20 15% 15%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Gallery card system with warm undertones */
+    --card: 35 30% 98%;
+    --card-foreground: 20 15% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    /* Gallery popup/modal backgrounds */
+    --popover: 35 25% 97%;
+    --popover-foreground: 20 15% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Persian terracotta primary - warm and inviting */
+    --primary: 15 75% 45%;
+    --primary-foreground: 35 25% 97%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Warm secondary inspired by Persian ceramics */
+    --secondary: 35 20% 92%;
+    --secondary-foreground: 20 25% 20%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted gallery tones */
+    --muted: 35 15% 90%;
+    --muted-foreground: 20 10% 50%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Persian gold accent */
+    --accent: 40 85% 65%;
+    --accent-foreground: 20 25% 15%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Error states in warm tones */
+    --destructive: 5 75% 55%;
+    --destructive-foreground: 35 25% 97%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Gallery borders and inputs */
+    --border: 35 12% 85%;
+    --input: 35 12% 88%;
+    --ring: 15 75% 45%;
 
-    --radius: 0.5rem;
+    /* Gallery spacing */
+    --radius: 0.75rem;
+
+    /* Persian Art Gallery Custom Colors */
+    --persian-gold: 40 85% 65%;
+    --persian-gold-light: 40 75% 75%;
+    --persian-terracotta: 15 75% 45%;
+    --persian-terracotta-dark: 15 85% 35%;
+    --persian-navy: 220 40% 25%;
+    --persian-cream: 35 30% 95%;
+    --persian-warmth: 25 40% 92%;
+
+    /* Gradients for artistic flair */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--persian-terracotta)), hsl(var(--persian-gold)));
+    --gradient-warm: linear-gradient(180deg, hsl(var(--persian-cream)), hsl(var(--persian-warmth)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--persian-terracotta)) 0%, hsl(var(--persian-gold)) 50%, hsl(var(--persian-terracotta-dark)) 100%);
+    
+    /* Gallery shadows with warmth */
+    --shadow-gallery: 0 10px 40px -10px hsl(var(--persian-terracotta) / 0.15);
+    --shadow-artwork: 0 20px 60px -15px hsl(var(--persian-terracotta) / 0.2);
+    --shadow-elegant: 0 8px 30px -8px hsl(var(--persian-gold) / 0.1);
+
+    /* Animation easing for smooth gallery interactions */
+    --transition-gallery: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
 
     --sidebar-background: 0 0% 98%;
 
@@ -101,5 +135,56 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Vazirmatn', 'Noto Naskh Arabic', system-ui, sans-serif;
+    direction: rtl;
+  }
+
+  /* Persian typography optimizations */
+  .persian-text {
+    font-family: 'Vazirmatn', 'Noto Naskh Arabic', system-ui, sans-serif;
+    direction: rtl;
+    text-align: right;
+  }
+
+  .english-text {
+    font-family: system-ui, -apple-system, sans-serif;
+    direction: ltr;
+    text-align: left;
+  }
+
+  /* Gallery-specific animations */
+  .gallery-card {
+    transition: var(--transition-gallery);
+  }
+
+  .gallery-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-artwork);
+  }
+
+  .artwork-image {
+    transition: var(--transition-smooth);
+  }
+
+  .artwork-image:hover {
+    transform: scale(1.05);
+  }
+
+  /* Persian-friendly scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--persian-terracotta) / 0.3);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--persian-terracotta) / 0.5);
   }
 }

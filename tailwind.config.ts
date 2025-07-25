@@ -18,6 +18,10 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				'persian': ['Vazirmatn', 'Noto Naskh Arabic', 'system-ui', 'sans-serif'],
+				'english': ['system-ui', '-apple-system', 'sans-serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -61,7 +65,28 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				'persian-gold': 'hsl(var(--persian-gold))',
+				'persian-gold-light': 'hsl(var(--persian-gold-light))',
+				'persian-terracotta': 'hsl(var(--persian-terracotta))',
+				'persian-terracotta-dark': 'hsl(var(--persian-terracotta-dark))',
+				'persian-navy': 'hsl(var(--persian-navy))',
+				'persian-cream': 'hsl(var(--persian-cream))',
+				'persian-warmth': 'hsl(var(--persian-warmth))'
+			},
+			backgroundImage: {
+				'gradient-primary': 'var(--gradient-primary)',
+				'gradient-warm': 'var(--gradient-warm)',
+				'gradient-hero': 'var(--gradient-hero)'
+			},
+			boxShadow: {
+				'gallery': 'var(--shadow-gallery)',
+				'artwork': 'var(--shadow-artwork)',
+				'elegant': 'var(--shadow-elegant)'
+			},
+			transitionTimingFunction: {
+				'gallery': 'cubic-bezier(0.4, 0, 0.2, 1)',
+				'smooth': 'cubic-bezier(0.25, 0.1, 0.25, 1)'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
