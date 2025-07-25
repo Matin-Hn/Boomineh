@@ -73,9 +73,11 @@ const ArtworkCard = ({ artwork }: ArtworkCardProps) => {
             {artwork.price}
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm">
-              مشاهده جزئیات
-            </Button>
+            <a href={`/painting/${artwork.id}`}>
+              <Button variant="outline" size="sm">
+                مشاهده جزئیات
+              </Button>
+            </a>
             <Button variant="persian" size="sm">
               افزودن به سبد
             </Button>

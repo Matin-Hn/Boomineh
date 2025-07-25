@@ -18,17 +18,17 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
-            <a href="#gallery" className="text-foreground hover:text-primary transition-colors">
+            <a href="/" className="text-foreground hover:text-primary transition-colors">
               گالری
             </a>
-            <a href="#artists" className="text-foreground hover:text-primary transition-colors">
-              هنرمندان
+            <a href="/artist" className="text-foreground hover:text-primary transition-colors">
+              درباره هنرمند
             </a>
-            <a href="#categories" className="text-foreground hover:text-primary transition-colors">
-              دسته‌بندی‌ها
+            <a href="#contact" className="text-foreground hover:text-primary transition-colors">
+              تماس
             </a>
-            <a href="#about" className="text-foreground hover:text-primary transition-colors">
-              درباره ما
+            <a href="/admin" className="text-foreground hover:text-primary transition-colors">
+              پنل مدیریت
             </a>
           </nav>
 
@@ -60,17 +60,17 @@ const Header = () => {
         {isMenuOpen && (
           <nav className="md:hidden mt-4 pb-4 border-t border-border pt-4">
             <div className="flex flex-col space-y-4">
-              <a href="#gallery" className="text-foreground hover:text-primary transition-colors">
+              <a href="/" className="text-foreground hover:text-primary transition-colors">
                 گالری
               </a>
-              <a href="#artists" className="text-foreground hover:text-primary transition-colors">
-                هنرمندان
+              <a href="/artist" className="text-foreground hover:text-primary transition-colors">
+                درباره هنرمند
               </a>
-              <a href="#categories" className="text-foreground hover:text-primary transition-colors">
-                دسته‌بندی‌ها
+              <a href="#contact" className="text-foreground hover:text-primary transition-colors">
+                تماس
               </a>
-              <a href="#about" className="text-foreground hover:text-primary transition-colors">
-                درباره ما
+              <a href="/admin" className="text-foreground hover:text-primary transition-colors">
+                پنل مدیریت
               </a>
             </div>
           </nav>

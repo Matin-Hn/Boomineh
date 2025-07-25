@@ -1,7 +1,7 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import FeaturedGallery from "@/components/FeaturedGallery";
-import ArtistSpotlight from "@/components/ArtistSpotlight";
+
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -10,7 +10,6 @@ const Index = () => {
       <Header />
       <Hero />
       <FeaturedGallery />
-      <ArtistSpotlight />
       <Footer />
     </div>
   );

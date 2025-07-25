@@ -11,55 +11,55 @@ const FeaturedGallery = () => {
   const artworks = [
     {
       id: "1",
-      title: "نقاشی سنتی ایرانی",
-      artist: "محمد کاظمی",
-      price: "۱۲,۵۰۰,۰۰۰ تومان",
+      title: "رویای آبی",
+      artist: "معصومه شاه رمضانی",
+      price: "۲,۵۰۰,۰۰۰ تومان",
       image: artwork1,
-      category: "سنتی"
+      category: "معاصر"
     },
     {
       id: "2", 
-      title: "اثر انتزاعی مدرن",
-      artist: "سارا احمدی",
-      price: "۸,۰۰۰,۰۰۰ تومان",
+      title: "باغ خاطرات",
+      artist: "معصومه شاه رمضانی",
+      price: "۳,۲۰۰,۰۰۰ تومان",
       image: artwork2,
-      category: "مدرن"
+      category: "انتزاعی"
     },
     {
       id: "3",
-      title: "خوشنویسی فارسی",
-      artist: "علی رضایی",
-      price: "۶,۲۰۰,۰۰۰ تومان", 
+      title: "سکوت طلایی",
+      artist: "معصومه شاه رمضانی",
+      price: "۴,۱۰۰,۰۰۰ تومان", 
       image: artwork3,
-      category: "خوشنویسی"
+      category: "مینیمال"
     },
     {
       id: "4",
-      title: "نقاشی سنتی ایرانی",
-      artist: "فاطمه نوری",
-      price: "۱۵,۰۰۰,۰۰۰ تومان",
+      title: "نور در تاریکی",
+      artist: "معصومه شاه رمضانی",
+      price: "۲,۸۰۰,۰۰۰ تومان",
       image: artwork1,
-      category: "سنتی"
+      category: "معاصر"
     },
     {
       id: "5",
-      title: "اثر انتزاعی نو",
-      artist: "رضا محمدی",
-      price: "۹,۵۰۰,۰۰۰ تومان",
+      title: "احساس رنگ",
+      artist: "معصومه شاه رمضانی",
+      price: "۳,۵۰۰,۰۰۰ تومان",
       image: artwork2,
-      category: "مدرن"
+      category: "انتزاعی"
     },
     {
       id: "6",
-      title: "خوشنویسی کلاسیک",
-      artist: "حسن عباسی",
-      price: "۷,۸۰۰,۰۰۰ تومان",
+      title: "آرامش درونی",
+      artist: "معصومه شاه رمضانی",
+      price: "۳,۹۰۰,۰۰۰ تومان",
       image: artwork3,
-      category: "خوشنویسی"
+      category: "مینیمال"
     }
   ];
 
-  const categories = ["همه", "سنتی", "مدرن", "خوشنویسی", "معاصر"];
+  const categories = ["همه", "معاصر", "انتزاعی", "مینیمال"];
 
   const filteredArtworks = activeFilter === "همه" 
     ? artworks 
@@ -71,10 +71,10 @@ const FeaturedGallery = () => {
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            آثار منتخب گالری
+            آثار معصومه شاه رمضانی
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            مجموعه‌ای از برترین آثار هنری ایرانی و بین‌المللی که با دقت انتخاب شده‌اند
+            مجموعه‌ای از آثار منتخب هنرمند معاصر ایرانی با سبک منحصر به فرد
           </p>
         </div>
 
