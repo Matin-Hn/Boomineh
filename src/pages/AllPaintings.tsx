@@ -9,6 +9,7 @@ import { Filter, X } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ArtworkCard from "@/components/ArtworkCard";
+import artwork1 from "@/assets/artwork-1.jpg";
 
 interface Artwork {
   id: string;
@@ -37,7 +38,7 @@ const AllPaintings = () => {
       artist: "علی محمدی",
       price: "۱۲,۵۰۰,۰۰۰ تومان",
       priceNumeric: 12500000,
-      image: "/src/assets/artwork-1.jpg",
+      image: artwork1,
       category: "منظره",
       size: "بزرگ",
       medium: "رنگ روغن",
