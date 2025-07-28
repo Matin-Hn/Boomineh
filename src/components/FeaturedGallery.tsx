@@ -15,7 +15,8 @@ const FeaturedGallery = () => {
       artist: "معصومه شاه رمضانی",
       price: "۲,۵۰۰,۰۰۰ تومان",
       image: artwork1,
-      category: "معاصر"
+      category: "معاصر",
+      paintMaterials: "رنگ روغن بر روی بوم با لایه‌های رنگ شفاف"
     },
     {
       id: "2", 
@@ -23,7 +24,8 @@ const FeaturedGallery = () => {
       artist: "معصومه شاه رمضانی",
       price: "۳,۲۰۰,۰۰۰ تومان",
       image: artwork2,
-      category: "انتزاعی"
+      category: "انتزاعی",
+      paintMaterials: "رنگ آکریلیک با تکنیک کلاژ و ورق طلا"
     },
     {
       id: "3",
@@ -31,7 +33,8 @@ const FeaturedGallery = () => {
       artist: "معصومه شاه رمضانی",
       price: "۴,۱۰۰,۰۰۰ تومان", 
       image: artwork3,
-      category: "مینیمال"
+      category: "مینیمال",
+      paintMaterials: "آبرنگ و قلم‌موی طبیعی با تکنیک‌های سنتی"
     },
     {
       id: "4",
@@ -39,7 +42,8 @@ const FeaturedGallery = () => {
       artist: "معصومه شاه رمضانی",
       price: "۲,۸۰۰,۰۰۰ تومان",
       image: artwork1,
-      category: "معاصر"
+      category: "معاصر",
+      paintMaterials: "رنگ روغن و پیگمنت‌های معدنی طبیعی"
     },
     {
       id: "5",
@@ -47,7 +51,8 @@ const FeaturedGallery = () => {
       artist: "معصومه شاه رمضانی",
       price: "۳,۵۰۰,۰۰۰ تومان",
       image: artwork2,
-      category: "انتزاعی"
+      category: "انتزاعی",
+      paintMaterials: "میکس مدیا با عناصر بافت و رنگ‌های فلورسنت"
     },
     {
       id: "6",
@@ -55,7 +60,8 @@ const FeaturedGallery = () => {
       artist: "معصومه شاه رمضانی",
       price: "۳,۹۰۰,۰۰۰ تومان",
       image: artwork3,
-      category: "مینیمال"
+      category: "مینیمال",
+      paintMaterials: "جوهر سیاه و کاغذ دست‌ساز با تکنیک‌های کلیگرافی"
     }
   ];
 
@@ -102,9 +108,11 @@ const FeaturedGallery = () => {
 
         {/* View More Button */}
         <div className="text-center">
-          <Button variant="gallery" size="hero">
-            مشاهده همه آثار
-          </Button>
+          <a href="/all-paintings">
+            <Button variant="gallery" size="hero">
+              مشاهده همه آثار
+            </Button>
+          </a>
         </div>
       </div>
     </section>

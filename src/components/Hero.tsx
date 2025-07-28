@@ -19,7 +19,6 @@ const Hero = () => {
             <span className="block bg-gradient-to-r from-persian-gold to-persian-gold-light bg-clip-text text-transparent">
               رد بوم
             </span>
-            معصومه شاه رمضانی
           </h1>
           
           <p className="text-xl md:text-2xl mb-8 text-gray-200 leading-relaxed">
@@ -29,15 +28,18 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <a href="/all-paintings">
             <Button variant="gallery" size="hero" className="min-w-[200px]">
               مشاهده آثار
             </Button>
+            </a>
             <a href="/artist">
               <Button variant="warm" size="hero" className="min-w-[200px]">
                 درباره هنرمند
               </Button>
             </a>
           </div>
+
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 pt-8 border-t border-white/20">

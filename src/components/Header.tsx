@@ -17,9 +17,12 @@ const Header = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
+          <nav className="hidden md:flex items-center gap-5 rtl:space-x-reverse">
             <a href="/" className="text-foreground hover:text-primary transition-colors">
               گالری
+            </a>
+            <a href="/all-paintings" className="text-foreground hover:text-primary transition-colors">
+              تمام آثار
             </a>
             <a href="/artist" className="text-foreground hover:text-primary transition-colors">
               درباره هنرمند
@@ -34,15 +37,16 @@ const Header = () => {
 
           {/* Actions */}
           <div className="flex items-center space-x-4 rtl:space-x-reverse">
-            <Button variant="ghost" size="icon" className="hidden sm:flex">
-              <Search className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="icon">
-              <Heart className="h-5 w-5" />
-            </Button>
-            <Button variant="warm" size="icon">
-              <ShoppingCart className="h-5 w-5" />
-            </Button>
+            <a href="/favorites">
+              <Button variant="ghost" size="icon">
+                <Heart className="h-5 w-5" />
+              </Button>
+            </a>
+            <a href="/cart">
+              <Button variant="warm" size="icon">
+                <ShoppingCart className="h-5 w-5" />
+              </Button>
+            </a>
             
             {/* Mobile Menu Button */}
             <Button 
@@ -62,6 +66,9 @@ const Header = () => {
             <div className="flex flex-col space-y-4">
               <a href="/" className="text-foreground hover:text-primary transition-colors">
                 گالری
+              </a>
+              <a href="/all-paintings" className="text-foreground hover:text-primary transition-colors">
+                تمام آثار
               </a>
               <a href="/artist" className="text-foreground hover:text-primary transition-colors">
                 درباره هنرمند

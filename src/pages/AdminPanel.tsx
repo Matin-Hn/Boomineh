@@ -19,6 +19,7 @@ interface Painting {
   image: string;
   year: string;
   available: boolean;
+  paintMaterials?: string;
 }
 
 const AdminPanel = () => {
@@ -58,7 +59,8 @@ const AdminPanel = () => {
     description: "",
     image: "",
     year: "",
-    available: true
+    available: true,
+    paintMaterials: ""
   });
 
   const resetForm = () => {
@@ -70,7 +72,8 @@ const AdminPanel = () => {
       description: "",
       image: "",
       year: "",
-      available: true
+      available: true,
+      paintMaterials: ""
     });
     setIsEditing(false);
     setEditingId(null);
@@ -85,7 +88,8 @@ const AdminPanel = () => {
       description: painting.description,
       image: painting.image,
       year: painting.year,
-      available: painting.available
+      available: painting.available,
+      paintMaterials: painting.paintMaterials || ""
     });
     setEditingId(painting.id);
     setIsEditing(true);
@@ -308,6 +312,17 @@ const AdminPanel = () => {
                     onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                     placeholder="توضیحات کامل اثر..."
                     rows={4}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="paintMaterials">مواد و تکنیک استفاده شده</Label>
+                  <Textarea
+                    id="paintMaterials"
+                    value={formData.paintMaterials}
+                    onChange={(e) => setFormData(prev => ({ ...prev, paintMaterials: e.target.value }))}
+                    placeholder="مثال: رنگ روغن بر روی بوم با قطعات چوب طبیعی..."
+                    rows={3}
                   />
                 </div>
 
