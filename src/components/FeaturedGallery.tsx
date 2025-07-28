@@ -77,7 +77,7 @@ const FeaturedGallery = () => {
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            آثار معصومه شاه رمضانی
+          آثار
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             مجموعه‌ای از آثار منتخب هنرمند معاصر ایرانی با سبک منحصر به فرد
