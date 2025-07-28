@@ -93,13 +93,6 @@ const ArtistSpotlight = () => {
             </div>
           ))}
         </div>
-
-        {/* View All Artists */}
-        <div className="text-center">
-          <Button variant="persian" size="hero">
-            مشاهده همه هنرمندان
-          </Button>
-        </div>
       </div>
     </section>
   );

@@ -10,6 +10,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ArtworkCard from "@/components/ArtworkCard";
 import artwork1 from "@/assets/artwork-1.jpg";
+import artwork2 from "@/assets/artwork-2.jpg";
+import artwork3 from "@/assets/artwork-3.jpg";
 
 interface Artwork {
   id: string;
@@ -50,7 +52,7 @@ const AllPaintings = () => {
       artist: "فاطمه احمدی",
       price: "۸,۰۰۰,۰۰۰ تومان",
       priceNumeric: 8000000,
-      image: "/src/assets/artwork-2.jpg",
+      image: artwork2,
       category: "پرتره",
       size: "متوسط",
       medium: "آکریلیک",
@@ -62,7 +64,7 @@ const AllPaintings = () => {
       artist: "حسن رضایی",
       price: "۱۵,۰۰۰,۰۰۰ تومان",
       priceNumeric: 15000000,
-      image: "/src/assets/artwork-3.jpg",
+      image: artwork3,
       category: "انتزاعی",
       size: "بزرگ",
       medium: "میکس مدیا",
@@ -74,7 +76,7 @@ const AllPaintings = () => {
       artist: "مریم کریمی",
       price: "۶,۵۰۰,۰۰۰ تومان",
       priceNumeric: 6500000,
-      image: "/src/assets/hero-gallery.jpg",
+      image: artwork1,
       category: "طبیعت بی‌جان",
       size: "کوچک",
       medium: "آبرنگ",

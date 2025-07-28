@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Mail, Instagram, Phone } from "lucide-react";
+import { Mail, Instagram, Phone, ArrowUpToLine } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ArtistPic from "@/assets/hero-gallery.jpg";
+
 
 const ArtistBio = () => {
   return (
@@ -15,7 +17,7 @@ const ArtistBio = () => {
           <div className="text-center mb-16">
             <div className="w-48 h-48 mx-auto mb-8 rounded-full overflow-hidden bg-gradient-warm">
               <img
-                src="/src/assets/hero-gallery.jpg"
+                src= {ArtistPic}
                 alt="معصومه شاه رمضانی"
                 className="w-full h-full object-cover"
               />

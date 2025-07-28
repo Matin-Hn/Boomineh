@@ -6,6 +6,9 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ArtworkCard from "@/components/ArtworkCard";
 
+import artwork1 from "@/assets/artwork-1.jpg";
+import artwork3 from "@/assets/artwork-3.jpg";
+
 // Mock favorites data - in real app, this would come from state management
 const initialFavorites = [
   {
@@ -13,7 +16,7 @@ const initialFavorites = [
     title: "رویای آبی",
     artist: "معصومه شاه رمضانی",
     price: "۲,۵۰۰,۰۰۰ تومان",
-    image: "/src/assets/artwork-1.jpg",
+    image: artwork1,
     category: "مدرن"
   },
   {
@@ -21,7 +24,7 @@ const initialFavorites = [
     title: "سکوت طلایی",
     artist: "معصومه شاه رمضانی", 
     price: "۴,۱۰۰,۰۰۰ تومان",
-    image: "/src/assets/artwork-3.jpg",
+    image: artwork3,
     category: "معاصر"
   }
 ];

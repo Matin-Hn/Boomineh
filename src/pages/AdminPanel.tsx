@@ -9,6 +9,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Edit, Trash2, Upload, Save, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+import artwork1 from "@/assets/artwork-1.jpg";
+import artwork2 from "@/assets/artwork-2.jpg";
+
+
 interface Painting {
   id: string;
   title: string;
@@ -32,7 +36,7 @@ const AdminPanel = () => {
       dimensions: "۷۰ × ۵۰ سانتی‌متر",
       medium: "رنگ روغن روی بوم",
       description: "این اثر بازتابی از احساسات عمیق و رنگ‌های آرام آسمان در شب است.",
-      image: "/src/assets/artwork-1.jpg",
+      image: artwork1,
       year: "۱۴۰۲",
       available: true
     },
@@ -43,7 +47,7 @@ const AdminPanel = () => {
       dimensions: "۸۰ × ۶۰ سانتی‌متر",
       medium: "آکریلیک روی بوم",
       description: "مجموعه‌ای از خاطرات شیرین دوران کودکی که در قالب باغی رنگارنگ به تصویر کشیده شده.",
-      image: "/src/assets/artwork-2.jpg",
+      image: artwork2,
       year: "۱۴۰۱", 
       available: true
     }
