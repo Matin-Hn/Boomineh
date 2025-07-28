@@ -6,6 +6,10 @@ import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
+import artwork1 from "@/assets/artwork-1.jpg";
+import artwork2 from "@/assets/artwork-2.jpg";
+import artwork3 from "@/assets/artwork-3.jpg";
+
 // Mock data - in real app, this would come from a database
 const paintings = [
   {
@@ -15,7 +19,7 @@ const paintings = [
     dimensions: "۷۰ × ۵۰ سانتی‌متر",
     medium: "رنگ روغن روی بوم",
     description: "این اثر بازتابی از احساسات عمیق و رنگ‌های آرام آسمان در شب است. با استفاده از تکنیک‌های مدرن نقاشی و ترکیب رنگ‌های آبی و نقره‌ای، فضایی آرامش‌بخش و تأمل‌برانگیز خلق شده است.",
-    image: "/src/assets/artwork-1.jpg",
+    image: artwork1,
     year: "۱۴۰۲",
     available: true
   },
@@ -26,7 +30,7 @@ const paintings = [
     dimensions: "۸۰ × ۶۰ سانتی‌متر", 
     medium: "آکریلیک روی بوم",
     description: "مجموعه‌ای از خاطرات شیرین دوران کودکی که در قالب باغی رنگارنگ و پر از حیات به تصویر کشیده شده. هر گل و برگ نمادی از لحظه‌ای خاص و فراموش‌نشدنی است.",
-    image: "/src/assets/artwork-2.jpg",
+    image: artwork2,
     year: "۱۴۰۱",
     available: true
   },
@@ -37,7 +41,7 @@ const paintings = [
     dimensions: "۹۰ × ۷۰ سانتی‌متر",
     medium: "رنگ روغن و ورق طلا روی بوم",
     description: "اثری معاصر که سکوت و آرامش درونی را با استفاده از رنگ‌های گرم و ورق طلای واقعی نمایش می‌دهد. این تابلو در نور مختلف، جلوه‌های متفاوتی به خود می‌گیرد.",
-    image: "/src/assets/artwork-3.jpg", 
+    image: artwork3, 
     year: "۱۴۰۲",
     available: false
   }
