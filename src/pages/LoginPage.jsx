@@ -1,5 +1,13 @@
-// src/pages/LoginPage.jsx
 import LoginForm from "../components/LoginForm";
+import Header from "../components/Header";
+
 export default function LoginPage() {
-  return <div><h2>Login</h2><LoginForm /></div>;
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+      <div className="container mx-auto px-4 py-16 flex items-center justify-center">
+        <LoginForm />
+      </div>
+    </div>
+  );
 }
