@@ -9,6 +9,9 @@ import ArtistBio from "./pages/ArtistBio";
 import AdminPanel from "./pages/AdminPanel";
 import Cart from "./pages/Cart";
 import Favorites from "./pages/Favorites";
+import Login from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import Paintings from "./pages/PaintingsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +29,10 @@ const App = () => {
             <Route path="/admin" element={<AdminPanel />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/favorites" element={<Favorites />} />
+            <Route path="/favorites" element={<Favorites />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/paintings" element={<Paintings />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
