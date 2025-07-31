@@ -33,6 +33,9 @@ const Header = () => {
             <a href="/admin" className="text-foreground hover:text-primary transition-colors">
               پنل مدیریت
             </a>
+            <a href="/login" className="text-foreground hover:text-primary transition-colors">
+              ورود
+            </a>
           </nav>
 
           {/* Actions */}
@@ -78,6 +81,9 @@ const Header = () => {
               </a>
               <a href="/admin" className="text-foreground hover:text-primary transition-colors">
                 پنل مدیریت
+              </a>
+              <a href="/login" className="text-foreground hover:text-primary transition-colors">
+                ورود
               </a>
             </div>
           </nav>
