@@ -40,7 +40,7 @@ const RegisterForm = () => {
   const handleSubmit = async (data: RegisterFormData) => {
     setIsLoading(true);
     try {
-      await register(data.email, data.password, data.username);
+      await register(data.username, data.email, data.password);
       toast({
         title: "ثبت نام موفق",
         description: "لطفاً ایمیل خود را برای تأیید حساب بررسی کنید",
