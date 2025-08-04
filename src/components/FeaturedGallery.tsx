@@ -1,75 +1,44 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ArtworkCard from "./ArtworkCard";
 import { Button } from "@/components/ui/button";
-import artwork1 from "@/assets/artwork-1.jpg";
-import artwork2 from "@/assets/artwork-2.jpg";
-import artwork3 from "@/assets/artwork-3.jpg";
+import { fetchPaintings } from "@/api/paintingsAPI"; // اتصال به API
 
 const FeaturedGallery = () => {
+  const [artworks, setArtworks] = useState([]);
   const [activeFilter, setActiveFilter] = useState("همه");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const artworks = [
-    {
-      id: "1",
-      title: "رویای آبی",
-      artist: "معصومه شاه رمضانی",
-      price: "۲,۵۰۰,۰۰۰ تومان",
-      image: artwork1,
-      category: "معاصر",
-      paintMaterials: "رنگ روغن بر روی بوم با لایه‌های رنگ شفاف"
-    },
-    {
-      id: "2", 
-      title: "باغ خاطرات",
-      artist: "معصومه شاه رمضانی",
-      price: "۳,۲۰۰,۰۰۰ تومان",
-      image: artwork2,
-      category: "انتزاعی",
-      paintMaterials: "رنگ آکریلیک با تکنیک کلاژ و ورق طلا"
-    },
-    {
-      id: "3",
-      title: "سکوت طلایی",
-      artist: "معصومه شاه رمضانی",
-      price: "۴,۱۰۰,۰۰۰ تومان", 
-      image: artwork3,
-      category: "مینیمال",
-      paintMaterials: "آبرنگ و قلم‌موی طبیعی با تکنیک‌های سنتی"
-    },
-    {
-      id: "4",
-      title: "نور در تاریکی",
-      artist: "معصومه شاه رمضانی",
-      price: "۲,۸۰۰,۰۰۰ تومان",
-      image: artwork1,
-      category: "معاصر",
-      paintMaterials: "رنگ روغن و پیگمنت‌های معدنی طبیعی"
-    },
-    {
-      id: "5",
-      title: "احساس رنگ",
-      artist: "معصومه شاه رمضانی",
-      price: "۳,۵۰۰,۰۰۰ تومان",
-      image: artwork2,
-      category: "انتزاعی",
-      paintMaterials: "میکس مدیا با عناصر بافت و رنگ‌های فلورسنت"
-    },
-    {
-      id: "6",
-      title: "آرامش درونی",
-      artist: "معصومه شاه رمضانی",
-      price: "۳,۹۰۰,۰۰۰ تومان",
-      image: artwork3,
-      category: "مینیمال",
-      paintMaterials: "جوهر سیاه و کاغذ دست‌ساز با تکنیک‌های کلیگرافی"
-    }
-  ];
+  useEffect(() => {
+    const loadPaintings = async () => {
+      try {
+        const data = await fetchPaintings();
+        setArtworks(data);
+      } catch (err) {
+        console.error("🛑 خطا در دریافت آثار:", err);
+        setError("خطا در دریافت اطلاعات آثار");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadPaintings();
+  }, []);
 
   const categories = ["همه", "معاصر", "انتزاعی", "مینیمال"];
 
-  const filteredArtworks = activeFilter === "همه" 
-    ? artworks 
-    : artworks.filter(artwork => artwork.category === activeFilter);
+  const filteredArtworks =
+    activeFilter === "همه"
+      ? artworks
+      : artworks.filter((artwork) => artwork.category === activeFilter);
+
+  if (loading) {
+    return <p className="text-center text-lg">در حال بارگذاری آثار...</p>;
+  }
+
+  if (error) {
+    return <p className="text-center text-red-500">{error}</p>;
+  }
 
   return (
     <section className="py-20 bg-gradient-warm">
@@ -77,7 +46,7 @@ const FeaturedGallery = () => {
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-          آثار
+            آثار
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             مجموعه‌ای از آثار منتخب هنرمند معاصر ایرانی با سبک منحصر به فرد

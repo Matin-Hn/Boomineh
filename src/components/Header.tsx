@@ -43,6 +43,18 @@ const Header = () => {
             <a href="/admin" className="text-foreground hover:text-primary transition-colors">
               پنل مدیریت
             </a>
+            {isLoggedIn ? (
+              <button
+                onClick={handleLogout}
+                className="text-red-600 hover:underline transition-colors"
+              >
+                خروج
+              </button>
+            ) : (
+              <a href="/login" className="text-foreground hover:text-primary transition-colors">
+                ورود
+              </a>
+            )}
           </nav>
 
           {/* Actions */}
@@ -89,6 +101,18 @@ const Header = () => {
               <a href="/admin" className="text-foreground hover:text-primary transition-colors">
                 پنل مدیریت
               </a>
+              {isLoggedIn ? (
+                <button
+                  onClick={handleLogout}
+                  className="text-red-600 hover:underline transition-colors"
+                >
+                  خروج
+                </button>
+              ) : (
+                <a href="/login" className="text-foreground hover:text-primary transition-colors">
+                  ورود
+                </a>
+              )}
             </div>
           </nav>
         )}

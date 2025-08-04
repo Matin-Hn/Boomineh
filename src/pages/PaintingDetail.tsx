@@ -1,58 +1,44 @@
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Heart, Share2, ShoppingCart } from "lucide-react";
-import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-
-import artwork1 from "@/assets/artwork-1.jpg";
-import artwork2 from "@/assets/artwork-2.jpg";
-import artwork3 from "@/assets/artwork-3.jpg";
-
-// Mock data - in real app, this would come from a database
-const paintings = [
-  {
-    id: "1",
-    title: "رویای آبی",
-    price: "۲,۵۰۰,۰۰۰ تومان",
-    dimensions: "۷۰ × ۵۰ سانتی‌متر",
-    medium: "رنگ روغن روی بوم",
-    description: "این اثر بازتابی از احساسات عمیق و رنگ‌های آرام آسمان در شب است. با استفاده از تکنیک‌های مدرن نقاشی و ترکیب رنگ‌های آبی و نقره‌ای، فضایی آرامش‌بخش و تأمل‌برانگیز خلق شده است.",
-    image: artwork1,
-    year: "۱۴۰۲",
-    available: true
-  },
-  {
-    id: "2", 
-    title: "باغ خاطرات",
-    price: "۳,۲۰۰,۰۰۰ تومان",
-    dimensions: "۸۰ × ۶۰ سانتی‌متر", 
-    medium: "آکریلیک روی بوم",
-    description: "مجموعه‌ای از خاطرات شیرین دوران کودکی که در قالب باغی رنگارنگ و پر از حیات به تصویر کشیده شده. هر گل و برگ نمادی از لحظه‌ای خاص و فراموش‌نشدنی است.",
-    image: artwork2,
-    year: "۱۴۰۱",
-    available: true
-  },
-  {
-    id: "3",
-    title: "سکوت طلایی", 
-    price: "۴,۱۰۰,۰۰۰ تومان",
-    dimensions: "۹۰ × ۷۰ سانتی‌متر",
-    medium: "رنگ روغن و ورق طلا روی بوم",
-    description: "اثری معاصر که سکوت و آرامش درونی را با استفاده از رنگ‌های گرم و ورق طلای واقعی نمایش می‌دهد. این تابلو در نور مختلف، جلوه‌های متفاوتی به خود می‌گیرد.",
-    image: artwork3, 
-    year: "۱۴۰۲",
-    available: false
-  }
-];
+import { getPainting } from "@/api/paintingsAPI";
 
 const PaintingDetail = () => {
   const { id } = useParams();
+  const [painting, setPainting] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
-  const painting = paintings.find(p => p.id === id);
 
-  if (!painting) {
+  useEffect(() => {
+    const fetchPainting = async () => {
+      try {
+        const data = await getPainting(id);
+        setPainting(data);
+      } catch (err) {
+        console.error("خطا در دریافت اطلاعات اثر:", err);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPainting();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background text-center py-24">
+        <p className="text-xl text-muted-foreground">در حال بارگذاری...</p>
+      </div>
+    );
+  }
+
+  if (error || !painting) {
     return (
       <div className="min-h-screen bg-background">
         <Header />
@@ -70,7 +56,7 @@ const PaintingDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main className="container mx-auto px-4 py-8">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
@@ -96,7 +82,7 @@ const PaintingDetail = () => {
                 </div>
               )}
             </div>
-            
+
             {/* Action Buttons */}
             <div className="flex gap-3">
               <Button
