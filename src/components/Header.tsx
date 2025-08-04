@@ -1,9 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Search, ShoppingCart, Menu, Heart } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { logout } from "@/api/authAPI"; 
+import { useNavigate } from "react-router-dom"; 
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-sm border-b border-border">
@@ -33,9 +43,18 @@ const Header = () => {
             <a href="/admin" className="text-foreground hover:text-primary transition-colors">
               پنل مدیریت
             </a>
-            <a href="/login" className="text-foreground hover:text-primary transition-colors">
-              ورود
-            </a>
+            {isLoggedIn ? (
+              <button
+                onClick={handleLogout}
+                className="text-red-600 hover:underline transition-colors"
+              >
+                خروج
+              </button>
+            ) : (
+              <a href="/login" className="text-foreground hover:text-primary transition-colors">
+                ورود
+              </a>
+            )}
           </nav>
 
           {/* Actions */}
@@ -50,11 +69,11 @@ const Header = () => {
                 <ShoppingCart className="h-5 w-5" />
               </Button>
             </a>
-            
+
             {/* Mobile Menu Button */}
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               className="md:hidden"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
@@ -82,9 +101,18 @@ const Header = () => {
               <a href="/admin" className="text-foreground hover:text-primary transition-colors">
                 پنل مدیریت
               </a>
-              <a href="/login" className="text-foreground hover:text-primary transition-colors">
-                ورود
-              </a>
+              {isLoggedIn ? (
+                <button
+                  onClick={handleLogout}
+                  className="text-red-600 hover:underline transition-colors"
+                >
+                  خروج
+                </button>
+              ) : (
+                <a href="/login" className="text-foreground hover:text-primary transition-colors">
+                  ورود
+                </a>
+              )}
             </div>
           </nav>
         )}

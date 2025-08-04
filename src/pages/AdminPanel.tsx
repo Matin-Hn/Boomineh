@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,138 +9,254 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Edit, Trash2, Upload, Save, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-import artwork1 from "@/assets/artwork-1.jpg";
-import artwork2 from "@/assets/artwork-2.jpg";
+import NotFound from "@/pages/NotFound";
+import Loading from "@/components/ui/Loading";
+import AccessDenied from "@/components/ui/AccessDenied";
+import { fetchUserInfo } from "@/api/userAPI";
+import LoginFirst from "@/components/ui/LoginFirst";
 
+
+import { 
+  fetchPaintings, 
+  createPainting, 
+  updatePainting, 
+  deletePainting,
+  getPainting
+} from "../api/paintingsAPI";
 
 interface Painting {
-  id: string;
+  id: number;
   title: string;
-  price: string;
-  dimensions: string;
-  medium: string;
   description: string;
   image: string;
-  year: string;
-  available: boolean;
-  paintMaterials?: string;
+  artist?: string;
+  price?: number;
+  category?: string;
+  medium?: string;
+  dimensions?: string;
+  year?: number;
+  available?: boolean;
+}
+
+interface FormData {
+  title: string;
+  description: string;
+  image: File | null;
+  artist?: string;
+  price?: string;
+  category?: string;
+  medium?: string;
+  dimensions?: string;
+  year?: string;
 }
 
 const AdminPanel = () => {
+  const [isSuperuser, setIsSuperuser] = useState<boolean | null>(null);  // related to userAPI
   const { toast } = useToast();
-  const [paintings, setPaintings] = useState<Painting[]>([
-    {
-      id: "1",
-      title: "رویای آبی",
-      price: "۲,۵۰۰,۰۰۰ تومان",
-      dimensions: "۷۰ × ۵۰ سانتی‌متر",
-      medium: "رنگ روغن روی بوم",
-      description: "این اثر بازتابی از احساسات عمیق و رنگ‌های آرام آسمان در شب است.",
-      image: artwork1,
-      year: "۱۴۰۲",
-      available: true
-    },
-    {
-      id: "2",
-      title: "باغ خاطرات", 
-      price: "۳,۲۰۰,۰۰۰ تومان",
-      dimensions: "۸۰ × ۶۰ سانتی‌متر",
-      medium: "آکریلیک روی بوم",
-      description: "مجموعه‌ای از خاطرات شیرین دوران کودکی که در قالب باغی رنگارنگ به تصویر کشیده شده.",
-      image: artwork2,
-      year: "۱۴۰۱", 
-      available: true
-    }
-  ]);
-
+  const [paintings, setPaintings] = useState<Painting[]>([]);
+  const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [formData, setFormData] = useState<Omit<Painting, 'id'>>({
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [formData, setFormData] = useState<FormData>({
     title: "",
-    price: "",
-    dimensions: "",
-    medium: "",
     description: "",
-    image: "",
-    year: "",
-    available: true,
-    paintMaterials: ""
+    image: null,
+    artist: "",
+    price: "",
+    category: "",
+    medium: "",
+    dimensions: "",
+    year: ""
   });
+
+  const token = localStorage.getItem("access");
+
+  // Load paintings from API
+  const loadPaintings = async () => {
+    try {
+      setLoading(true);
+      const data = await fetchPaintings();
+      setPaintings(data);
+    } catch (error) {
+      toast({
+        title: "خطا",
+        description: "خطا در بارگذاری آثار هنری",
+        variant: "destructive"
+      });
+      console.error("Error loading paintings:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const checkAccess = async () => {
+      if (!token) {
+        setIsSuperuser(false);
+        return;
+      }
+      try {
+        const data = await fetchUserInfo(token);
+        setIsSuperuser(data.is_superuser === true);
+      } catch (error) {
+        console.error("Error fetching user info", error);
+        setIsSuperuser(false);
+      }
+    };
+    
+    loadPaintings();
+    checkAccess();
+  }, []);
 
   const resetForm = () => {
     setFormData({
       title: "",
-      price: "",
-      dimensions: "",
-      medium: "",
       description: "",
-      image: "",
-      year: "",
-      available: true,
-      paintMaterials: ""
+      image: null,
+      artist: "",
+      price: "",
+      category: "",
+      medium: "",
+      dimensions: "",
+      year: ""
     });
     setIsEditing(false);
     setEditingId(null);
   };
 
-  const handleEdit = (painting: Painting) => {
-    setFormData({
-      title: painting.title,
-      price: painting.price,
-      dimensions: painting.dimensions,
-      medium: painting.medium,
-      description: painting.description,
-      image: painting.image,
-      year: painting.year,
-      available: painting.available,
-      paintMaterials: painting.paintMaterials || ""
-    });
-    setEditingId(painting.id);
-    setIsEditing(true);
-  };
-
-  const handleSave = () => {
-    if (!formData.title || !formData.price) {
+  const handleEdit = async (paintingId: number) => {
+    try {
+      const painting = await getPainting(paintingId);
+      setFormData({
+        title: painting.title || "",
+        description: painting.description || "",
+        image: null,
+        artist: painting.artist || "",
+        price: painting.price?.toString() || "",
+        category: painting.category || "",
+        medium: painting.medium || "",
+        dimensions: painting.dimensions || "",
+        year: painting.year?.toString() || ""
+      });
+      setEditingId(paintingId);
+      setIsEditing(true);
+    } catch (error) {
       toast({
         title: "خطا",
-        description: "لطفاً عنوان و قیمت را وارد کنید",
+        description: "خطا در بارگذاری اطلاعات اثر",
+        variant: "destructive"
+      });
+      console.error("Error loading painting:", error);
+    }
+  };
+
+  const handleSave = async () => {
+    if (!formData.title || !formData.description) {
+      toast({
+        title: "خطا",
+        description: "لطفاً عنوان و توضیحات را وارد کنید",
         variant: "destructive"
       });
       return;
     }
 
-    if (editingId) {
-      // Update existing painting
-      setPaintings(prev => prev.map(p => 
-        p.id === editingId ? { ...formData, id: editingId } : p
-      ));
+    if (!token) {
       toast({
-        title: "موفقیت",
-        description: "اثر با موفقیت ویرایش شد"
+        title: "خطا",
+        description: "لطفاً ابتدا وارد شوید",
+        variant: "destructive"
       });
-    } else {
-      // Add new painting
-      const newPainting: Painting = {
-        ...formData,
-        id: Date.now().toString()
-      };
-      setPaintings(prev => [...prev, newPainting]);
-      toast({
-        title: "موفقیت", 
-        description: "اثر جدید با موفقیت اضافه شد"
-      });
+      return;
     }
 
-    resetForm();
+    try {
+      setLoading(true);
+      const data = {
+        title: formData.title,
+        description: formData.description,
+        price: formData.price ? parseFloat(formData.price) : undefined,
+        category: formData.category,
+        material: formData.medium,
+        size: formData.dimensions,
+        year: formData.year ? parseInt(formData.year) : undefined,
+        ...(formData.image && { image: formData.image })
+      };
+
+      if (editingId) {
+        await updatePainting(editingId, data, token);
+        toast({
+          title: "موفقیت",
+          description: "اثر با موفقیت ویرایش شد"
+        });
+      } else {
+        await createPainting(data, token);
+        toast({
+          title: "موفقیت", 
+          description: "اثر جدید با موفقیت اضافه شد"
+        });
+      }
+
+      resetForm();
+      loadPaintings();
+    } catch (error) {
+      toast({
+        title: "خطا",
+        description: editingId ? "خطا در ویرایش اثر" : "خطا در افزودن اثر",
+        variant: "destructive"
+      });
+      console.error("Error saving painting:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDelete = (id: string) => {
-    setPaintings(prev => prev.filter(p => p.id !== id));
-    toast({
-      title: "موفقیت",
-      description: "اثر با موفقیت حذف شد"
-    });
+  const handleDelete = async (id: number) => {
+    if (!token) {
+      toast({
+        title: "خطا",
+        description: "لطفاً ابتدا وارد شوید",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const confirmed = window.confirm("آیا از حذف این اثر مطمئن هستید؟");
+    if (!confirmed) return;
+
+    try {
+      setLoading(true);
+      const success = await deletePainting(id, token);
+      if (success) {
+        toast({
+          title: "موفقیت",
+          description: "اثر با موفقیت حذف شد"
+        });
+        loadPaintings();
+      }
+    } catch (error) {
+      toast({
+        title: "خطا",
+        description: "خطا در حذف اثر",
+        variant: "destructive"
+      });
+      console.error("Error deleting painting:", error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+
+  if (isSuperuser === null) {       // Checking login status
+    return <Loading />;
+  }
+
+  if (!token) {                     // Show the "Login First"
+    return <LoginFirst />;
+  }
+  
+  if (isSuperuser === false) {      // User aren't admin
+    return <AccessDenied />;
+  }
 
   return (
     <div className="min-h-screen bg-background p-6">
@@ -151,7 +267,11 @@ const AdminPanel = () => {
             <h1 className="text-3xl font-bold text-foreground">پنل مدیریت</h1>
             <p className="text-muted-foreground">مدیریت آثار هنری معصومه شاه رمضانی</p>
           </div>
-          <Button variant="persian" onClick={() => setIsEditing(true)}>
+          <Button 
+            variant="persian" 
+            onClick={() => setIsEditing(true)}
+            disabled={loading}
+          >
             <Plus className="ml-2 h-4 w-4" />
             افزودن اثر جدید
           </Button>
@@ -168,66 +288,92 @@ const AdminPanel = () => {
 
           {/* Paintings List */}
           <TabsContent value="paintings" className="space-y-6">
-            <div className="grid gap-6">
-              {paintings.map((painting) => (
-                <Card key={painting.id}>
-                  <CardContent className="p-6">
-                    <div className="flex gap-6">
-                      <div className="w-32 h-24 rounded-lg overflow-hidden bg-muted">
-                        <img
-                          src={painting.image}
-                          alt={painting.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-start justify-between mb-2">
-                          <h3 className="text-lg font-semibold">{painting.title}</h3>
-                          <div className="flex gap-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleEdit(painting)}
-                            >
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              onClick={() => handleDelete(painting.id)}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
+            {loading ? (
+              <div className="text-center py-8">
+                <p className="text-muted-foreground">در حال بارگذاری...</p>
+              </div>
+            ) : (
+              <div className="grid gap-6">
+                {paintings.length === 0 ? (
+                  <Card>
+                    <CardContent className="p-8 text-center">
+                      <p className="text-muted-foreground">هیچ اثری یافت نشد</p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  paintings.map((painting) => (
+                    <Card key={painting.id}>
+                      <CardContent className="p-6">
+                        <div className="flex gap-6">
+                          <div className="w-32 h-24 rounded-lg overflow-hidden bg-muted">
+                            <img
+                              src={painting.image?.startsWith('http') ? painting.image : `http://localhost:8000${painting.image}`}
+                              alt={painting.title}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.currentTarget.src = '/placeholder.svg';
+                              }}
+                            />
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-start justify-between mb-2">
+                              <h3 className="text-lg font-semibold">{painting.title}</h3>
+                              <div className="flex gap-2">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => handleEdit(painting.id)}
+                                  disabled={loading}
+                                >
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  onClick={() => handleDelete(painting.id)}
+                                  disabled={loading}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </div>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                              {painting.price && (
+                                <div>
+                                  <span className="text-muted-foreground">قیمت: </span>
+                                  <span className="font-medium">{painting.price.toLocaleString()} تومان</span>
+                                </div>
+                              )}
+                              {painting.dimensions && (
+                                <div>
+                                  <span className="text-muted-foreground">اندازه: </span>
+                                  <span className="font-medium">{painting.dimensions}</span>
+                                </div>
+                              )}
+                              {painting.year && (
+                                <div>
+                                  <span className="text-muted-foreground">سال: </span>
+                                  <span className="font-medium">{painting.year}</span>
+                                </div>
+                              )}
+                              {painting.medium && (
+                                <div>
+                                  <span className="text-muted-foreground">متریال: </span>
+                                  <span className="font-medium">{painting.medium}</span>
+                                </div>
+                              )}
+                            </div>
+                            <p className="text-muted-foreground text-sm mt-2 line-clamp-2">
+                              {painting.description}
+                            </p>
                           </div>
                         </div>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                          <div>
-                            <span className="text-muted-foreground">قیمت: </span>
-                            <span className="font-medium">{painting.price}</span>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">اندازه: </span>
-                            <span className="font-medium">{painting.dimensions}</span>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">سال: </span>
-                            <span className="font-medium">{painting.year}</span>
-                          </div>
-                          <div>
-                            <Badge variant={painting.available ? "default" : "destructive"}>
-                              {painting.available ? "موجود" : "فروخته شده"}
-                            </Badge>
-                          </div>
-                        </div>
-                        <p className="text-muted-foreground text-sm mt-2 line-clamp-2">
-                          {painting.description}
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                      </CardContent>
+                    </Card>
+                  ))
+                )}
+              </div>
+            )}
           </TabsContent>
 
           {/* Add/Edit Form */}
@@ -257,12 +403,23 @@ const AdminPanel = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="price">قیمت *</Label>
+                    <Label htmlFor="price">قیمت (تومان)</Label>
                     <Input
                       id="price"
+                      type="number"
                       value={formData.price}
                       onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value }))}
-                      placeholder="مثال: ۲,۵۰۰,۰۰۰ تومان"
+                      placeholder="2500000"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="year">سال تولید</Label>
+                    <Input
+                      id="year"
+                      type="number"
+                      value={formData.year}
+                      onChange={(e) => setFormData(prev => ({ ...prev, year: e.target.value }))}
+                      placeholder="1402"
                     />
                   </div>
                   <div className="space-y-2">
@@ -271,7 +428,7 @@ const AdminPanel = () => {
                       id="dimensions"
                       value={formData.dimensions}
                       onChange={(e) => setFormData(prev => ({ ...prev, dimensions: e.target.value }))}
-                      placeholder="مثال: ۷۰ × ۵۰ سانتی‌متر"
+                      placeholder="70 × 50 سانتی‌متر"
                     />
                   </div>
                   <div className="space-y-2">
@@ -280,36 +437,34 @@ const AdminPanel = () => {
                       id="medium"
                       value={formData.medium}
                       onChange={(e) => setFormData(prev => ({ ...prev, medium: e.target.value }))}
-                      placeholder="مثال: رنگ روغن روی بوم"
+                      placeholder="رنگ روغن روی بوم"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="year">سال تولید</Label>
+                    <Label htmlFor="category">دسته‌بندی</Label>
                     <Input
-                      id="year"
-                      value={formData.year}
-                      onChange={(e) => setFormData(prev => ({ ...prev, year: e.target.value }))}
-                      placeholder="مثال: ۱۴۰۲"
+                      id="category"
+                      value={formData.category}
+                      onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                      placeholder="نقاشی، مجسمه، ..."
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="image">تصویر</Label>
-                    <div className="flex gap-2">
-                      <Input
-                        id="image"
-                        value={formData.image}
-                        onChange={(e) => setFormData(prev => ({ ...prev, image: e.target.value }))}
-                        placeholder="آدرس تصویر"
-                      />
-                      <Button variant="outline" size="icon">
-                        <Upload className="h-4 w-4" />
-                      </Button>
-                    </div>
+                    <Input
+                      id="image"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setFormData(prev => ({ 
+                        ...prev, 
+                        image: e.target.files?.[0] || null 
+                      }))}
+                    />
                   </div>
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="description">توضیحات</Label>
+                  <Label htmlFor="description">توضیحات *</Label>
                   <Textarea
                     id="description"
                     value={formData.description}
@@ -319,32 +474,14 @@ const AdminPanel = () => {
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="paintMaterials">مواد و تکنیک استفاده شده</Label>
-                  <Textarea
-                    id="paintMaterials"
-                    value={formData.paintMaterials}
-                    onChange={(e) => setFormData(prev => ({ ...prev, paintMaterials: e.target.value }))}
-                    placeholder="مثال: رنگ روغن بر روی بوم با قطعات چوب طبیعی..."
-                    rows={3}
-                  />
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="available"
-                    checked={formData.available}
-                    onChange={(e) => setFormData(prev => ({ ...prev, available: e.target.checked }))}
-                    className="rounded border-gray-300"
-                  />
-                  <Label htmlFor="available">اثر موجود است</Label>
-                </div>
-
                 <div className="flex gap-4 pt-4">
-                  <Button variant="persian" onClick={handleSave}>
+                  <Button 
+                    variant="persian" 
+                    onClick={handleSave}
+                    disabled={loading}
+                  >
                     <Save className="ml-2 h-4 w-4" />
-                    {editingId ? "به‌روزرسانی" : "ذخیره"}
+                    {loading ? "در حال ذخیره..." : (editingId ? "به‌روزرسانی" : "ذخیره")}
                   </Button>
                   <Button variant="outline" onClick={resetForm}>
                     لغو
@@ -369,22 +506,31 @@ const AdminPanel = () => {
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-center">آثار موجود</CardTitle>
+                  <CardTitle className="text-center">آثار با قیمت</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold text-center text-green-600">
-                    {paintings.filter(p => p.available).length}
+                    {paintings.filter(p => p.price).length}
                   </div>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-center">فروخته شده</CardTitle>
+                  <CardTitle className="text-center">میانگین قیمت</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-center text-red-600">
-                    {paintings.filter(p => !p.available).length}
+                  <div className="text-3xl font-bold text-center text-blue-600">
+                    {paintings.length > 0 && paintings.filter(p => p.price).length > 0
+                      ? Math.round(
+                          paintings
+                            .filter(p => p.price)
+                            .reduce((sum, p) => sum + (p.price || 0), 0) / 
+                          paintings.filter(p => p.price).length
+                        ).toLocaleString()
+                      : "0"
+                    }
                   </div>
+                  <p className="text-xs text-center text-muted-foreground mt-1">تومان</p>
                 </CardContent>
               </Card>
             </div>
