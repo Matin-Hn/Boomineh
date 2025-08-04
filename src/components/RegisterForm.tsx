@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { signUp } from "../lib/auth";
+import { register } from "../api/authAPI";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -40,7 +40,7 @@ const RegisterForm = () => {
   const handleSubmit = async (data: RegisterFormData) => {
     setIsLoading(true);
     try {
-      await signUp(data.email, data.password, data.username);
+      await register(data.username, data.email, data.password);
       toast({
         title: "ثبت نام موفق",
         description: "لطفاً ایمیل خود را برای تأیید حساب بررسی کنید",
@@ -93,7 +93,7 @@ const RegisterForm = () => {
                       type="email" 
                       placeholder="example@email.com" 
                       {...field} 
-                      dir="ltr"
+                      dir="rtl"
                     />
                   </FormControl>
                   <FormMessage />
