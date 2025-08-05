@@ -7,12 +7,15 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { getPainting } from "@/api/paintingsAPI";
 
+import { PaintingsAPI } from "../api/PaintingsAPI";
+
 const PaintingDetail = () => {
   const { id } = useParams();
   const [painting, setPainting] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+
 
   useEffect(() => {
     const fetchPainting = async () => {
@@ -24,6 +27,19 @@ const PaintingDetail = () => {
         setError(true);
       } finally {
         setLoading(false);
+      }
+    };
+
+    const handleLikeToggle = async () => {
+      try {
+        if (isLiked) {
+          await PaintingsAPI.unlike(painting.id);
+        } else {
+          await PaintingsAPI.like(painting.id);
+        }
+        setIsLiked(!isLiked);
+      } catch (err) {
+        console.error("خطا در لایک‌کردن:", err);
       }
     };
 
@@ -52,7 +68,31 @@ const PaintingDetail = () => {
       </div>
     );
   }
-
+  // *************
+  const handleLikeToggle = async (e) => {
+    e.preventDefault();
+    console.log("clicked");
+  
+    if (!painting) {
+      console.warn("painting is null");
+      return;
+    }
+  
+    try {
+      if (isLiked) {
+        console.log("unliking...");
+        await PaintingsAPI.unlike(painting.id);
+      } else {
+        console.log("liking...");
+        await PaintingsAPI.like(painting.id);
+      }
+  
+      setIsLiked(!isLiked);
+    } catch (err) {
+      console.error("خطا در لایک‌کردن:", err);
+    }
+  };
+  // ******************
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -88,13 +128,10 @@ const PaintingDetail = () => {
               <Button
                 variant="outline"
                 size="icon"
-                onClick={() => setIsLiked(!isLiked)}
+                onClick={handleLikeToggle}
                 className={isLiked ? "text-persian-terracotta border-persian-terracotta" : ""}
               >
                 <Heart className={`h-4 w-4 ${isLiked ? 'fill-current' : ''}`} />
-              </Button>
-              <Button variant="outline" size="icon">
-                <Share2 className="h-4 w-4" />
               </Button>
             </div>
           </div>

@@ -1,7 +1,11 @@
 from django.urls import path
-from .views import PaintingListCreateView, PaintingRetrieveUpdateDestroyView
+from rest_framework.routers import DefaultRouter
+from .views import PaintingViewSet
+
+
+router = DefaultRouter()
+router.register(r'', PaintingViewSet, basename='painting')
 
 urlpatterns = [
-    path('', PaintingListCreateView.as_view(), name='painting-list'),
-    path('<int:pk>/', PaintingRetrieveUpdateDestroyView.as_view(), name='painting-detail'),
-]
+
+] + router.urls

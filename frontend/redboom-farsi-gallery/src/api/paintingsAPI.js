@@ -41,3 +41,17 @@ export const deletePainting = async (id) => {
   const res = await api.delete(`${BASE_URL}${id}/`);
   return res.status === 204;
 };
+
+
+export const PaintingsAPI = {
+  list: () => api.get(BASE_URL),
+  retrieve: (id) => api.get(`${BASE_URL}${id}/`),
+  like: (id) => api.post(`${BASE_URL}${id}/like/`),
+  unlike: (id) => api.post(`${BASE_URL}${id}/unlike/`),
+  favorites: () => api.get(`${BASE_URL}favorites/`),
+}
+
+export const fetchFavorites = async () => {
+  const res = await api.get(`${BASE_URL}favorites/`);
+  return res.data;
+};

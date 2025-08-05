@@ -15,7 +15,7 @@ class Painting(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     price = models.IntegerField()
     category = models.CharField(max_length=50, null=True)
-    liked_by = models.ManyToManyField(User, related_name='liked_paintings', blank=True)
+    liked_by = models.ManyToManyField(User, related_name='liked_paintings', blank=True, null=models.CASCADE)
     
 
     def __str__(self):
