@@ -6,8 +6,8 @@ import { ArrowRight, Heart, Share2, ShoppingCart } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { getPainting } from "@/api/paintingsAPI";
-
 import { PaintingsAPI } from "../api/PaintingsAPI";
+import LoginPopup from "@/components/ui/login-popup";
 
 const PaintingDetail = () => {
   const { id } = useParams();
@@ -15,6 +15,7 @@ const PaintingDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
 
 
   useEffect(() => {
@@ -22,24 +23,12 @@ const PaintingDetail = () => {
       try {
         const data = await getPainting(id);
         setPainting(data);
+        setIsLiked(data.is_liked);
       } catch (err) {
         console.error("خطا در دریافت اطلاعات اثر:", err);
         setError(true);
       } finally {
         setLoading(false);
-      }
-    };
-
-    const handleLikeToggle = async () => {
-      try {
-        if (isLiked) {
-          await PaintingsAPI.unlike(painting.id);
-        } else {
-          await PaintingsAPI.like(painting.id);
-        }
-        setIsLiked(!isLiked);
-      } catch (err) {
-        console.error("خطا در لایک‌کردن:", err);
       }
     };
 
@@ -71,7 +60,15 @@ const PaintingDetail = () => {
   // *************
   const handleLikeToggle = async (e) => {
     e.preventDefault();
+
+    const token = localStorage.getItem("access");
+
     console.log("clicked");
+
+    if (!token) {
+      setShowLoginPopup(true);
+      return;  
+    }
   
     if (!painting) {
       console.warn("painting is null");
@@ -133,6 +130,17 @@ const PaintingDetail = () => {
               >
                 <Heart className={`h-4 w-4 ${isLiked ? 'fill-current' : ''}`} />
               </Button>
+              
+              {showLoginPopup && (
+                <LoginPopup
+                  open={true}
+                  onClose={() => setShowLoginPopup(false)}
+                  onLogin={() => {
+                    // کارهایی که بعد از لاگین می‌خوای انجام بدی
+                    setShowLoginPopup(false);
+                  }}
+                />
+              )}
             </div>
           </div>
 

@@ -9,6 +9,9 @@ class PaintingViewSet(viewsets.ModelViewSet):
     serializer_class = PaintingSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+    def get_serializer_context(self):
+        return {'request': self.request}
+
     # Custom action: Like
     @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def like(self, request, pk=None):

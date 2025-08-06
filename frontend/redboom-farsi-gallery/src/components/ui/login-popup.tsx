@@ -1,0 +1,29 @@
+// src/components/ui/login-popup.tsx or .jsx
+import React from "react"
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+
+const LoginPopup = ({ open, onClose, onLogin }) => {
+  return (
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="text-center">
+        <DialogHeader>
+          <DialogTitle className="text-center">نیاز به ورود</DialogTitle>
+        </DialogHeader>
+        <p className="text-sm text-muted-foreground mb-4">
+          برای ثبت علاقه‌مندی، ابتدا وارد حساب کاربری خود شوید.
+        </p>
+        <div className="flex justify-center gap-4">
+          <Button variant="default" onClick={onLogin}>
+            ورود
+          </Button>
+          <Button variant="outline" onClick={onClose}>
+            بستن
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+export default LoginPopup
