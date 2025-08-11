@@ -10,7 +10,7 @@ class Painting(models.Model):
     size = models.CharField(max_length=10)
     description = models.TextField(blank=True)
     material = models.TextField()
-    staus = models.BooleanField(default=True)
+    availability = models.BooleanField(default=True)
     year = models.IntegerField()                                       # "Year Of Manufacture"
     created_at = models.DateTimeField(auto_now_add=True)
     price = models.IntegerField()

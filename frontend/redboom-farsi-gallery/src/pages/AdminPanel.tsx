@@ -32,10 +32,10 @@ interface Painting {
   artist?: string;
   price?: number;
   category?: string;
-  medium?: string;
-  dimensions?: string;
+  material?: string;
+  size?: string;
   year?: number;
-  available?: boolean;
+  availability?: boolean;
 }
 
 interface FormData {
@@ -45,9 +45,10 @@ interface FormData {
   artist?: string;
   price?: string;
   category?: string;
-  medium?: string;
-  dimensions?: string;
+  material?: string;
+  size?: string;
   year?: string;
+  availability?: boolean;
 }
 
 const AdminPanel = () => {
@@ -64,9 +65,10 @@ const AdminPanel = () => {
     artist: "",
     price: "",
     category: "",
-    medium: "",
-    dimensions: "",
-    year: ""
+    material: "",
+    size: "",
+    year: "",
+    availability: true,
   });
 
   const token = localStorage.getItem("access");
@@ -116,8 +118,8 @@ const AdminPanel = () => {
       artist: "",
       price: "",
       category: "",
-      medium: "",
-      dimensions: "",
+      material: "",
+      size: "",
       year: ""
     });
     setIsEditing(false);
@@ -134,9 +136,10 @@ const AdminPanel = () => {
         artist: painting.artist || "",
         price: painting.price?.toString() || "",
         category: painting.category || "",
-        medium: painting.medium || "",
-        dimensions: painting.dimensions || "",
-        year: painting.year?.toString() || ""
+        material: painting.material || "",
+        size: painting.size || "",
+        year: painting.year?.toString() || "",
+        availability: painting.availability ?? true
       });
       setEditingId(paintingId);
       setIsEditing(true);
@@ -176,10 +179,12 @@ const AdminPanel = () => {
         description: formData.description,
         price: formData.price ? parseFloat(formData.price) : undefined,
         category: formData.category,
-        material: formData.medium,
-        size: formData.dimensions,
+        material: formData.material,
+        size: formData.size,
         year: formData.year ? parseInt(formData.year) : undefined,
-        ...(formData.image && { image: formData.image })
+        ...(formData.image && { image: formData.image }),
+        availability: formData.availability, // ✅ تغییر
+      ...(formData.image && { image: formData.image })
       };
 
       if (editingId) {
@@ -344,10 +349,10 @@ const AdminPanel = () => {
                                   <span className="font-medium">{painting.price.toLocaleString()} تومان</span>
                                 </div>
                               )}
-                              {painting.dimensions && (
+                              {painting.size && (
                                 <div>
                                   <span className="text-muted-foreground">اندازه: </span>
-                                  <span className="font-medium">{painting.dimensions}</span>
+                                  <span className="font-medium">{painting.size}</span>
                                 </div>
                               )}
                               {painting.year && (
@@ -356,10 +361,10 @@ const AdminPanel = () => {
                                   <span className="font-medium">{painting.year}</span>
                                 </div>
                               )}
-                              {painting.medium && (
+                              {painting.size && (
                                 <div>
                                   <span className="text-muted-foreground">متریال: </span>
-                                  <span className="font-medium">{painting.medium}</span>
+                                  <span className="font-medium">{painting.material}</span>
                                 </div>
                               )}
                             </div>
@@ -426,7 +431,7 @@ const AdminPanel = () => {
                     <Label htmlFor="dimensions">اندازه</Label>
                     <Input
                       id="dimensions"
-                      value={formData.dimensions}
+                      value={formData.size}
                       onChange={(e) => setFormData(prev => ({ ...prev, dimensions: e.target.value }))}
                       placeholder="70 × 50 سانتی‌متر"
                     />
@@ -435,7 +440,7 @@ const AdminPanel = () => {
                     <Label htmlFor="medium">متریال</Label>
                     <Input
                       id="medium"
-                      value={formData.medium}
+                      value={formData.material}
                       onChange={(e) => setFormData(prev => ({ ...prev, medium: e.target.value }))}
                       placeholder="رنگ روغن روی بوم"
                     />
@@ -472,6 +477,16 @@ const AdminPanel = () => {
                     placeholder="توضیحات کامل اثر..."
                     rows={4}
                   />
+                </div>
+                <div className="space-y-2">
+                  <Button
+                    type="button"
+                    variant={formData.availability ? "default" : "secondary"}
+                    onClick={() => setFormData(prev => ({ ...prev, availability: !prev.availability}))}
+                    >
+                    {formData.availability ? "موجود" : "ناموجود"}
+                  </Button>
+                  <Label className="ml-4">وضعیت موجودی</Label>
                 </div>
 
                 <div className="flex gap-4 pt-4">

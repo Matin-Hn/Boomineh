@@ -7,7 +7,8 @@ class PaintingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Painting
-        fields = ['id', 'title', 'description', 'image', 'created_at', 'liked_by', 'is_liked', 'likes_count']
+        fields = ['id', 'title', 'description', 'image', 'created_at', 'liked_by', 'is_liked', 'likes_count', 'year', 'price', 'size', 'material', 'availability', 'category']
+
 
 
     def get_is_liked(self, obj):

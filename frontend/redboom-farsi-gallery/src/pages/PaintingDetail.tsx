@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Heart, Share2, ShoppingCart } from "lucide-react";
+import { ArrowRight, Heart, ShoppingCart } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { getPainting } from "@/api/paintingsAPI";
@@ -17,13 +17,14 @@ const PaintingDetail = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
 
-
   useEffect(() => {
     const fetchPainting = async () => {
       try {
         const data = await getPainting(id);
         setPainting(data);
-        setIsLiked(data.is_liked);
+        if (typeof data.is_liked === "boolean") {
+          setIsLiked(data.is_liked);
+        }
       } catch (err) {
         console.error("خطا در دریافت اطلاعات اثر:", err);
         setError(true);
@@ -34,6 +35,33 @@ const PaintingDetail = () => {
 
     fetchPainting();
   }, [id]);
+
+  const handleLikeToggle = async (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem("access");
+
+    if (!token) {
+      setShowLoginPopup(true);
+      return;
+    }
+
+    if (!painting) {
+      console.warn("painting is null");
+      return;
+    }
+
+    try {
+      if (isLiked) {
+        await PaintingsAPI.unlike(painting.id);
+      } else {
+        await PaintingsAPI.like(painting.id);
+      }
+      setIsLiked(!isLiked);
+    } catch (err) {
+      console.error("خطا در لایک‌کردن:", err);
+    }
+  };
 
   if (loading) {
     return (
@@ -48,7 +76,9 @@ const PaintingDetail = () => {
       <div className="min-h-screen bg-background">
         <Header />
         <div className="container mx-auto px-4 py-16 text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-4">اثر مورد نظر یافت نشد</h1>
+          <h1 className="text-2xl font-bold text-foreground mb-4">
+            اثر مورد نظر یافت نشد
+          </h1>
           <Link to="/">
             <Button variant="persian">بازگشت به گالری</Button>
           </Link>
@@ -57,39 +87,7 @@ const PaintingDetail = () => {
       </div>
     );
   }
-  // *************
-  const handleLikeToggle = async (e) => {
-    e.preventDefault();
 
-    const token = localStorage.getItem("access");
-
-    console.log("clicked");
-
-    if (!token) {
-      setShowLoginPopup(true);
-      return;  
-    }
-  
-    if (!painting) {
-      console.warn("painting is null");
-      return;
-    }
-  
-    try {
-      if (isLiked) {
-        console.log("unliking...");
-        await PaintingsAPI.unlike(painting.id);
-      } else {
-        console.log("liking...");
-        await PaintingsAPI.like(painting.id);
-      }
-  
-      setIsLiked(!isLiked);
-    } catch (err) {
-      console.error("خطا در لایک‌کردن:", err);
-    }
-  };
-  // ******************
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -97,7 +95,9 @@ const PaintingDetail = () => {
       <main className="container mx-auto px-4 py-8">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
-          <Link to="/" className="hover:text-foreground transition-colors">گالری</Link>
+          <Link to="/" className="hover:text-foreground transition-colors">
+            گالری
+          </Link>
           <ArrowRight className="h-4 w-4 rotate-180" />
           <span className="text-foreground">{painting.title}</span>
         </div>
@@ -111,7 +111,7 @@ const PaintingDetail = () => {
                 alt={painting.title}
                 className="w-full h-full object-cover"
               />
-              {!painting.available && (
+              {!painting.availability && (
                 <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
                   <Badge variant="destructive" className="text-lg px-4 py-2">
                     فروخته شده
@@ -128,17 +128,14 @@ const PaintingDetail = () => {
                 onClick={handleLikeToggle}
                 className={isLiked ? "text-persian-terracotta border-persian-terracotta" : ""}
               >
-                <Heart className={`h-4 w-4 ${isLiked ? 'fill-current' : ''}`} />
+                <Heart className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`} />
               </Button>
-              
+
               {showLoginPopup && (
                 <LoginPopup
                   open={true}
                   onClose={() => setShowLoginPopup(false)}
-                  onLogin={() => {
-                    // کارهایی که بعد از لاگین می‌خوای انجام بدی
-                    setShowLoginPopup(false);
-                  }}
+                  onLogin={() => setShowLoginPopup(false)}
                 />
               )}
             </div>
@@ -172,8 +169,8 @@ const PaintingDetail = () => {
                 </div>
                 <div className="flex justify-between py-2 border-b border-border/50">
                   <span className="text-muted-foreground">وضعیت:</span>
-                  <Badge variant={painting.available ? "default" : "destructive"}>
-                    {painting.available ? "موجود" : "فروخته شده"}
+                  <Badge variant={painting.availability ? "default" : "destructive"}>
+                    {painting.availability ? "موجود" : "فروخته شده"}
                   </Badge>
                 </div>
               </div>
@@ -187,7 +184,7 @@ const PaintingDetail = () => {
 
             {/* Purchase Buttons */}
             <div className="space-y-3 pt-6">
-              {painting.available ? (
+              {painting.availability ? (
                 <>
                   <Button variant="persian" size="lg" className="w-full">
                     <ShoppingCart className="ml-2 h-5 w-5" />

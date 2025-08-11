@@ -1,40 +1,50 @@
-import { useState } from "react";
+// src/pages/Favorites.tsx
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Heart } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ArtworkCard from "@/components/ArtworkCard";
-
-import artwork1 from "@/assets/artwork-1.jpg";
-import artwork3 from "@/assets/artwork-3.jpg";
-
-// Mock favorites data - in real app, this would come from state management
-const initialFavorites = [
-  {
-    id: "1",
-    title: "رویای آبی",
-    artist: "معصومه شاه رمضانی",
-    price: "۲,۵۰۰,۰۰۰ تومان",
-    image: artwork1,
-    category: "مدرن"
-  },
-  {
-    id: "3",
-    title: "سکوت طلایی",
-    artist: "معصومه شاه رمضانی", 
-    price: "۴,۱۰۰,۰۰۰ تومان",
-    image: artwork3,
-    category: "معاصر"
-  }
-];
+import { fetchFavorites } from "@/api/PaintingsAPI";  
 
 const Favorites = () => {
-  const [favorites, setFavorites] = useState(initialFavorites);
+  const [favorites, setFavorites] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  const removeFavorite = (id: string) => {
-    setFavorites(items => items.filter(item => item.id !== id));
-  };
+  useEffect(() => {
+    const loadFavorites = async () => {
+      try {
+        const data = await fetchFavorites();
+        setFavorites(data);
+      } catch (err) {
+        console.error("خطا در دریافت علاقه‌مندی‌ها:", err);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadFavorites();
+  }, []);
+
+
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-muted-foreground">در حال بارگذاری...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-red-500">خطایی در بارگذاری علاقه‌مندی‌ها رخ داد.</p>
+      </div>
+    );
+  }
 
   if (favorites.length === 0) {
     return (
@@ -65,7 +75,7 @@ const Favorites = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main className="container mx-auto px-4 py-8">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
@@ -82,13 +92,6 @@ const Favorites = () => {
               {favorites.length} اثر در لیست علاقه‌مندی‌های شما
             </p>
           </div>
-          
-          {/* <div className="flex items-center gap-2 text-persian-terracotta">
-            <Heart className="h-5 w-5 fill-current" />
-            <span className="font-medium">{favorites.length}</span>
-          </div> */}
-          {/* I muted the heart and len of fav */}
-
         </div>
 
         {/* Favorites Grid */}
@@ -96,37 +99,8 @@ const Favorites = () => {
           {favorites.map((artwork) => (
             <div key={artwork.id} className="relative">
               <ArtworkCard artwork={artwork} />
-              
-              {/* Remove from favorites button */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="absolute top-3 left-3 bg-white/90 hover:bg-white shadow-sm"
-                onClick={() => removeFavorite(artwork.id)}
-              >
-                <Heart className="h-4 w-4 text-persian-terracotta fill-current" />
-              </Button>
             </div>
           ))}
-        </div>
-
-        {/* Recommendations */}
-        <div className="border-t border-border pt-12">
-          <div className="text-center space-y-4 mb-8">
-            <h2 className="text-2xl font-bold text-foreground">پیشنهادات ویژه</h2>
-            <p className="text-muted-foreground">
-              بر اساس علاقه‌مندی‌های شما، این آثار را پیشنهاد می‌دهیم
-            </p>
-          </div>
-          
-          <div className="text-center">
-            <Link to="/">
-              <Button variant="outline" size="lg">
-                مشاهده تمام آثار
-                <ArrowRight className="mr-2 h-5 w-5 rotate-180" />
-              </Button>
-            </Link>
-          </div>
         </div>
       </main>
 
