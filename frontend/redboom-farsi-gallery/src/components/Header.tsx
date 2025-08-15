@@ -31,7 +31,7 @@ const Header = () => {
             <a href="/" className="text-foreground hover:text-primary transition-colors">
               گالری
             </a>
-            <a href="/all-paintings" className="text-foreground hover:text-primary transition-colors">
+            <a href="/paintings" className="text-foreground hover:text-primary transition-colors">
               تمام آثار
             </a>
             <a href="/artist" className="text-foreground hover:text-primary transition-colors">
@@ -89,7 +89,7 @@ const Header = () => {
               <a href="/" className="text-foreground hover:text-primary transition-colors">
                 گالری
               </a>
-              <a href="/all-paintings" className="text-foreground hover:text-primary transition-colors">
+              <a href="/paintings" className="text-foreground hover:text-primary transition-colors">
                 تمام آثار
               </a>
               <a href="/artist" className="text-foreground hover:text-primary transition-colors">

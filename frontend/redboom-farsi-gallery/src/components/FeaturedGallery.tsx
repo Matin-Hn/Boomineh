@@ -77,7 +77,7 @@ const FeaturedGallery = () => {
 
         {/* View More Button */}
         <div className="text-center">
-          <a href="/all-paintings">
+          <a href="/paintings">
             <Button variant="gallery" size="hero">
               مشاهده همه آثار
             </Button>

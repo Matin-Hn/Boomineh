@@ -6,12 +6,13 @@ import { ArrowRight, Heart } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ArtworkCard from "@/components/ArtworkCard";
-import { fetchFavorites } from "@/api/PaintingsAPI";  
+import { fetchFavorites } from "@/api/paintingsAPI";  
+import LoginFirst from "@/components/ui/LoginFirst";
 
 const Favorites = () => {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const loadFavorites = async () => {
@@ -20,14 +21,27 @@ const Favorites = () => {
         setFavorites(data);
       } catch (err) {
         console.error("خطا در دریافت علاقه‌مندی‌ها:", err);
-        setError(true);
+
+        // اگر axios استفاده می‌کنی:
+        if (err.response && err.response.status === 401) {
+          setError("unauthorized");
+        } else {
+          setError("other");
+        }
+
+        // اگر fetch استفاده می‌کنی:
+        // if (err.status === 401) {
+        //   setError("unauthorized");
+        // } else {
+        //   setError("other");
+        // }
+
       } finally {
         setLoading(false);
       }
     };
     loadFavorites();
   }, []);
-
 
 
   if (loading) {
@@ -38,7 +52,11 @@ const Favorites = () => {
     );
   }
 
-  if (error) {
+  if (error === "unauthorized") {
+    return <LoginFirst />;
+  }
+
+  if (error === "other") {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <p className="text-red-500">خطایی در بارگذاری علاقه‌مندی‌ها رخ داد.</p>

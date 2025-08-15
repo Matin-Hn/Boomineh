@@ -28,7 +28,7 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a href="/all-paintings">
+            <a href="/paintings">
             <Button variant="gallery" size="hero" className="min-w-[200px]">
               مشاهده آثار
             </Button>

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Heart, ShoppingCart, Eye } from "lucide-react";
 import { useState, useEffect } from "react";
-import { PaintingsAPI } from "../api/PaintingsAPI";
+import { PaintingsAPI } from "@/api/paintingsAPI";
 
 interface Artwork {
   id: string;

@@ -11,7 +11,6 @@ import Cart from "./pages/Cart";
 import Favorites from "./pages/Favorites";
 import Login from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import Paintings from "./pages/PaintingsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,7 +22,6 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/all-paintings" element={<AllPaintings />} />
             <Route path="/painting/:id" element={<PaintingDetail />} />
             <Route path="/artist" element={<ArtistBio />} />
             <Route path="/admin" element={<AdminPanel />} />
@@ -32,7 +30,7 @@ const App = () => {
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/paintings" element={<Paintings />} />
+            <Route path="/paintings" element={<AllPaintings />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

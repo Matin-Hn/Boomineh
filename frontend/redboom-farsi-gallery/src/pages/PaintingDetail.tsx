@@ -6,7 +6,7 @@ import { ArrowRight, Heart, ShoppingCart } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { getPainting } from "@/api/paintingsAPI";
-import { PaintingsAPI } from "../api/PaintingsAPI";
+import { PaintingsAPI } from "@/api/paintingsAPI";
 import LoginPopup from "@/components/ui/login-popup";
 
 const PaintingDetail = () => {
