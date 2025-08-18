@@ -432,7 +432,7 @@ const AdminPanel = () => {
                     <Input
                       id="dimensions"
                       value={formData.size}
-                      onChange={(e) => setFormData(prev => ({ ...prev, dimensions: e.target.value }))}
+                      onChange={(e) => setFormData(prev => ({ ...prev, size: e.target.value }))}
                       placeholder="70 × 50 سانتی‌متر"
                     />
                   </div>
@@ -441,7 +441,7 @@ const AdminPanel = () => {
                     <Input
                       id="medium"
                       value={formData.material}
-                      onChange={(e) => setFormData(prev => ({ ...prev, medium: e.target.value }))}
+                      onChange={(e) => setFormData(prev => ({ ...prev, material: e.target.value }))}
                       placeholder="رنگ روغن روی بوم"
                     />
                   </div>

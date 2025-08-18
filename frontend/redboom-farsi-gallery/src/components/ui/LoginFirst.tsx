@@ -10,7 +10,7 @@ const LoginFirst = () =>{
         </CardHeader>
         <CardContent className="text-center">
             <p className="text-muted-foreground mb-4">
-            برای دسترسی به پنل مدیریت باید وارد شوید
+            برای دسترسی به این بخش باید وارد شوید
             </p>
             <Button 
             variant="persian" 
