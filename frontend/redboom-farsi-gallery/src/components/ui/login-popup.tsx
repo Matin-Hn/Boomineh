@@ -2,6 +2,7 @@
 import React from "react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Link } from "react-router-dom"
 
 const LoginPopup = ({ open, onClose, onLogin }) => {
   return (
@@ -11,12 +12,14 @@ const LoginPopup = ({ open, onClose, onLogin }) => {
           <DialogTitle className="text-center">نیاز به ورود</DialogTitle>
         </DialogHeader>
         <p className="text-sm text-muted-foreground mb-4">
-          برای ثبت علاقه‌مندی، ابتدا وارد حساب کاربری خود شوید.
+          برای ثبت، ابتدا وارد حساب کاربری خود شوید.
         </p>
         <div className="flex justify-center gap-4">
-          <Button variant="default" onClick={onLogin}>
-            ورود
-          </Button>
+          <Link to="/login">
+            <Button variant="default">
+              ورود
+            </Button>
+          </Link>
           <Button variant="outline" onClick={onClose}>
             بستن
           </Button>

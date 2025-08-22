@@ -8,6 +8,12 @@ import Footer from "@/components/Footer";
 import { getPainting } from "@/api/paintingsAPI";
 import { PaintingsAPI } from "@/api/paintingsAPI";
 import LoginPopup from "@/components/ui/login-popup";
+import { addToCart, deleteCartItem } from "@/api/cartAPI";
+import { fetchCart } from "@/api/cartAPI";
+// Format numbers
+import { formatNumber } from "@/utils/format";
+import { useAuth } from "@/hooks/useAuth";
+
 
 const PaintingDetail = () => {
   const { id } = useParams();
@@ -16,6 +22,10 @@ const PaintingDetail = () => {
   const [error, setError] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const [cart, setCart] = useState<any | null>(null);
+  const isInCart = cart?.items?.some((item: any) => item.painting.id === painting.id);
+  const {isLoggedIn} = useAuth();
+
 
   useEffect(() => {
     const fetchPainting = async () => {
@@ -32,7 +42,12 @@ const PaintingDetail = () => {
         setLoading(false);
       }
     };
-
+    const loadCart = async () => {
+      const data = await fetchCart();
+      setCart(data);
+    };
+    
+    loadCart();
     fetchPainting();
   }, [id]);
 
@@ -87,7 +102,6 @@ const PaintingDetail = () => {
       </div>
     );
   }
-
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -146,9 +160,9 @@ const PaintingDetail = () => {
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <h1 className="text-3xl font-bold text-foreground">{painting.title}</h1>
-                <Badge variant="secondary">{painting.year}</Badge>
+                <Badge variant="secondary">{formatNumber(painting.year)}</Badge>
               </div>
-              <p className="text-xl text-persian-terracotta font-bold mb-6">{painting.price}</p>
+              <p className="text-xl text-persian-terracotta font-bold mb-6">{new Intl.NumberFormat("fa-IR").format(painting.price)} تومان</p>
             </div>
 
             {/* Specifications */}
@@ -157,15 +171,15 @@ const PaintingDetail = () => {
               <div className="grid gap-3">
                 <div className="flex justify-between py-2 border-b border-border/50">
                   <span className="text-muted-foreground">اندازه:</span>
-                  <span className="font-medium">{painting.dimensions}</span>
+                  <span className="font-medium">{formatNumber(painting.size)}</span>
                 </div>
                 <div className="flex justify-between py-2 border-b border-border/50">
                   <span className="text-muted-foreground">متریال:</span>
-                  <span className="font-medium">{painting.medium}</span>
+                  <span className="font-medium">{painting.material}</span>
                 </div>
                 <div className="flex justify-between py-2 border-b border-border/50">
                   <span className="text-muted-foreground">سال تولید:</span>
-                  <span className="font-medium">{painting.year}</span>
+                  <span className="font-medium">{formatNumber(painting.year)}</span>
                 </div>
                 <div className="flex justify-between py-2 border-b border-border/50">
                   <span className="text-muted-foreground">وضعیت:</span>
@@ -185,20 +199,63 @@ const PaintingDetail = () => {
             {/* Purchase Buttons */}
             <div className="space-y-3 pt-6">
               {painting.availability ? (
-                <>
-                  <Button variant="persian" size="lg" className="w-full">
-                    <ShoppingCart className="ml-2 h-5 w-5" />
-                    افزودن به سبد خرید
+              <>
+                {isInCart ? (
+                  <Button
+                    variant="destructive"
+                    size="lg"
+                    className="w-full"
+                    onClick={async () => {
+                      try {
+                        // پیدا کردن آیتم مرتبط در سبد خرید
+                        const cartItem = cart.items.find((item: any) => item.painting.id === painting.id);
+                        if (cartItem) {
+                          await deleteCartItem(cartItem.id);
+                          // حذف از state محلی
+                          setCart({
+                            ...cart,
+                            items: cart.items.filter((i: any) => i.id !== cartItem.id),
+                          });
+                        }
+                      } catch (err) {
+                        console.error("Error removing from cart", err);
+                      }
+                    }}
+                  >
+                    حذف از سبد خرید
                   </Button>
-                  <Button variant="gold" size="lg" className="w-full">
-                    خرید مستقیم
+                ) : (
+                  <Button
+                    variant="persian"
+                    size="lg"
+                    className="w-full"
+                    onClick={async () => {
+                      if (!isLoggedIn) {
+                        setShowLoginPopup(true);
+                        return;
+                      }
+                      try {
+                        const updatedCart = await addToCart(painting.id);
+                        setCart(updatedCart); // API باید کل cart آپدیت‌شده رو برگردونه
+                      } catch (err) {
+                        console.error("Error adding to cart", err);
+                      }
+                    }}
+                  >
+                    اضافه کردن به سبد خرید
                   </Button>
-                </>
-              ) : (
-                <Button variant="outline" size="lg" className="w-full" disabled>
-                  این اثر فروخته شده است
+                )}
+
+                <Button variant="gold" size="lg" className="w-full">
+                  خرید مستقیم
                 </Button>
-              )}
+              </>
+            ) : (
+              <Button variant="outline" size="lg" className="w-full" disabled>
+                این اثر فروخته شده است
+              </Button>
+            )}
+
             </div>
 
             {/* Artist Info */}

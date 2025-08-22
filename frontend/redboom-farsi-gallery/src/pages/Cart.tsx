@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,50 +6,63 @@ import { Separator } from "@/components/ui/separator";
 import { Trash2, Plus, Minus, ArrowRight } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-
-// Mock cart data - in real app, this would come from state management
-const initialCartItems = [
-  {
-    id: "1",
-    title: "رویای آبی",
-    price: "۲,۵۰۰,۰۰۰ تومان",
-    priceValue: 2500000,
-    image: "/src/assets/artwork-1.jpg",
-    quantity: 1
-  },
-  {
-    id: "2",
-    title: "باغ خاطرات", 
-    price: "۳,۲۰۰,۰۰۰ تومان",
-    priceValue: 3200000,
-    image: "/src/assets/artwork-2.jpg",
-    quantity: 1
-  }
-];
+import { fetchCart, deleteCartItem } from "@/api/cartAPI";
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState(initialCartItems);
+  const [cart, setCart] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [quantities, setQuantities] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const loadCart = async () => {
+      try {
+        const data = await fetchCart();
+        setCart(data);
+
+        // مقداردهی اولیه quantity برای هر آیتم
+        const initialQuantities: Record<string, number> = {};
+        data.items.forEach((item: any) => {
+          initialQuantities[item.id] = 1;
+        });
+        setQuantities(initialQuantities);
+      } catch (err) {
+        console.error("Error fetching cart:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadCart();
+  }, []);
 
   const updateQuantity = (id: string, newQuantity: number) => {
-    if (newQuantity === 0) {
+    if (newQuantity <= 0) {
       removeItem(id);
       return;
     }
-    setCartItems(items => 
-      items.map(item => 
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
+    setQuantities(q => ({ ...q, [id]: newQuantity }));
+  };
+
+  const removeItem = async (itemId: string) => {
+    try {
+      await deleteCartItem(itemId);
+      setCart({
+        ...cart,
+        items: cart.items.filter((i: any) => i.id !== itemId),
+      });
+    } catch (err) {
+      console.error("Error deleting item:", err);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>در حال بارگذاری...</p>
+      </div>
     );
-  };
+  }
 
-  const removeItem = (id: string) => {
-    setCartItems(items => items.filter(item => item.id !== id));
-  };
-
-  const totalAmount = cartItems.reduce((sum, item) => sum + (item.priceValue * item.quantity), 0);
-  const formattedTotal = new Intl.NumberFormat('fa-IR').format(totalAmount);
-
-  if (cartItems.length === 0) {
+  if (!cart || cart.items.length === 0) {
     return (
       <div className="min-h-screen bg-background">
         <Header />
@@ -69,6 +82,12 @@ const Cart = () => {
     );
   }
 
+  const totalAmount = cart.items.reduce(
+    (sum: number, item: any) => sum + item.price_snapshot * (quantities[item.id] || 1),
+    0
+  );
+  const formattedTotal = new Intl.NumberFormat("fa-IR").format(totalAmount);
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -87,30 +106,31 @@ const Cart = () => {
             <h1 className="text-2xl font-bold text-foreground mb-6">سبد خرید شما</h1>
             
             <div className="space-y-4">
-              {cartItems.map((item) => (
+              {cart.items.map((item: any) => (
                 <Card key={item.id} className="overflow-hidden">
                   <CardContent className="p-6">
                     <div className="flex gap-6">
                       {/* Image */}
-                      <div className="relative w-24 h-24 rounded-lg overflow-hidden bg-muted flex-shrink-0">
-                        <img
-                          src={item.image}
-                          alt={item.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-
+                      <Link to={`/painting/${item.painting.id}`}>
+                        <div className="relative w-24 h-24 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+                          <img
+                            src={item.painting.image}
+                            alt={item.painting.title}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      </Link>
                       {/* Details */}
                       <div className="flex-1 space-y-3">
                         <div className="flex justify-between items-start">
                           <div>
-                            <Link to={`/painting/${item.id}`}>
+                            <Link to={`/painting/${item.painting.id}`}>
                               <h3 className="font-semibold text-foreground hover:text-primary transition-colors">
-                                {item.title}
+                                {item.painting.title}
                               </h3>
                             </Link>
                             <p className="text-persian-terracotta font-bold text-lg">
-                              {item.price}
+                              {new Intl.NumberFormat("fa-IR").format(item.price_snapshot)} تومان
                             </p>
                           </div>
                           <Button
@@ -125,25 +145,7 @@ const Cart = () => {
 
                         {/* Quantity Controls */}
                         <div className="flex items-center gap-3">
-                          <span className="text-sm text-muted-foreground">تعداد:</span>
                           <div className="flex items-center border border-border rounded-lg">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-8 w-8"
-                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                            >
-                              <Minus className="h-3 w-3" />
-                            </Button>
-                            <span className="px-3 py-1 text-sm font-medium">{item.quantity}</span>
-                            <Button
-                              variant="ghost"
-                              size="icon" 
-                              className="h-8 w-8"
-                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                            >
-                              <Plus className="h-3 w-3" />
-                            </Button>
                           </div>
                         </div>
                       </div>
@@ -161,13 +163,13 @@ const Cart = () => {
                 <h2 className="text-xl font-bold text-foreground">خلاصه سفارش</h2>
                 
                 <div className="space-y-3">
-                  {cartItems.map((item) => (
+                  {cart.items.map((item: any) => (
                     <div key={item.id} className="flex justify-between text-sm">
                       <span className="text-muted-foreground">
-                        {item.title} × {item.quantity}
+                        {item.painting.title} 
                       </span>
                       <span className="font-medium">
-                        {new Intl.NumberFormat('fa-IR').format(item.priceValue * item.quantity)} تومان
+                        {new Intl.NumberFormat("fa-IR").format(item.price_snapshot * (quantities[item.id] || 1))} تومان
                       </span>
                     </div>
                   ))}
@@ -184,9 +186,9 @@ const Cart = () => {
                   <Button variant="persian" size="lg" className="w-full">
                     تکمیل خرید
                   </Button>
-                  <Button variant="outline" size="lg" className="w-full">
-                    ادامه خرید
-                  </Button>
+                  {/* <Button variant="outline" size="lg" className="w-full">
+                    خرید حضوری
+                  </Button> */}
                 </div>
 
                 {/* Payment Methods */}

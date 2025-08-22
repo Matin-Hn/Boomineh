@@ -20,4 +20,27 @@ class Painting(models.Model):
 
     def __str__(self):
         return self.title
+    
+
+
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Cart {self.id} for {self.user}"
+
+    @property
+    def total_items(self):
+        return len(self.items.all())
+    
+    @property
+    def total_price(self):
+        return sum(item.painting.price for item in self.items.all())
+
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, related_name="items", on_delete=models.CASCADE)
+    painting = models.ForeignKey(Painting, on_delete=models.CASCADE)
+    price_snapshot = models.IntegerField(max_length=12)
 

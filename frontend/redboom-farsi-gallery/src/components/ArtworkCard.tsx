@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Heart, ShoppingCart, Eye } from "lucide-react";
 import { useState, useEffect } from "react";
 import { PaintingsAPI } from "@/api/paintingsAPI";
+import { addToCart } from "@/api/cartAPI";
 
 interface Artwork {
   id: string;
@@ -87,9 +88,20 @@ const ArtworkCard = ({ artwork }: ArtworkCardProps) => {
             </Button>
 
             {artwork.availability && (
-              <Button variant="persian" size="icon">
-                <ShoppingCart className="h-4 w-4" />
-              </Button>
+            <Button
+              variant="persian"
+              size="icon"
+              onClick={async () => {
+                try {
+                  const updatedCart = await addToCart(artwork.id, 1);
+                  console.log("Cart updated", updatedCart);
+                } catch (err) {
+                  console.error("Error adding to cart", err);
+                }
+              }}
+            >
+              <ShoppingCart className="h-4 w-4" />
+            </Button>
             )}
           </div>
 
