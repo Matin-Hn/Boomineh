@@ -98,7 +98,7 @@ Choose one of the following setup options:
 	# or
 	bun run dev
 	```
-	The app will be available at [http://localhost:8080/](http://localhost:8080/)
+	The app will be available at [http://localhost:5173/](http://localhost:5173/)
 
 </details>
 
@@ -152,4 +152,4 @@ MIT License
 
 ## 👤 Credits
 
-Developed by Matin-Hn and contributors.
+Developed by Matin-Hn.
