@@ -10,10 +10,10 @@ const Footer = () => {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <h3 className="text-3xl font-bold bg-gradient-to-r from-persian-gold to-persian-gold-light bg-clip-text text-transparent mb-4">
-              رد بوم | RedBoom
+              بومیـنه | Boomineh
             </h3>
             <p className="text-gray-300 leading-relaxed mb-6 max-w-md">
-              گالری هنری رد بوم، مکانی برای عاشقان هنر و زیبایی. ما با افتخار بهترین آثار هنری ایرانی و بین‌المللی را به شما عرضه می‌کنیم.
+              گالری هنری بومیـنه، مکانی برای عاشقان هنر و زیبایی. ما با افتخار بهترین آثار هنری ایرانی و بین‌المللی را به شما عرضه می‌کنیم.
             </p>
             <div className="flex gap-4">
               <Button variant="ghost" size="icon" className="text-white hover:text-persian-gold">
@@ -112,7 +112,7 @@ const Footer = () => {
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-gray-400 text-sm">
-              © ۱۴۰۳ گالری هنری رد بوم. تمامی حقوق محفوظ است.
+              © ۱۴۰۳ گالری هنری بومیـنه. تمامی حقوق محفوظ است.
             </div>
             <div className="flex gap-6 text-sm">
               <a href="#privacy" className="text-gray-400 hover:text-white transition-colors">

@@ -22,7 +22,7 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center space-x-4 rtl:space-x-reverse">
             <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              رد بوم | RedBoom
+              بومیـنه | Boomineh
             </h1>
           </div>
 
@@ -40,7 +40,7 @@ const Header = () => {
             <a href="#contact" className="text-foreground hover:text-primary transition-colors">
               تماس
             </a>
-            <a href="/admin" className="text-foreground hover:text-primary transition-colors">
+            <a href="/admin-panel" className="text-foreground hover:text-primary transition-colors">
               پنل مدیریت
             </a>
             {isLoggedIn ? (

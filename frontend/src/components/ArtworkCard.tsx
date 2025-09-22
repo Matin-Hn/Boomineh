@@ -62,11 +62,11 @@ const ArtworkCard = ({ artwork }: ArtworkCardProps) => {
         onMouseLeave={() => setIsHovered(false)}
       >
         {/* Image Container */}
-        <div className="relative overflow-hidden aspect-[4/3]">
+        <div className="relative overflow-hidden aspect-[4/3] bg-transparent">
           <img
             src={artwork.image}
             alt={artwork.title}
-            className="artwork-image w-full h-full object-cover"
+            className="artwork-image w-full h-full object-contain rounded-lg"
           />
 
           {/* Overlay Actions */}

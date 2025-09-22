@@ -17,7 +17,7 @@ const Hero = () => {
         <div className="max-w-4xl mx-auto">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
             <span className="block bg-gradient-to-r from-persian-gold to-persian-gold-light bg-clip-text text-transparent">
-              رد بوم
+              بومیـنه
             </span>
           </h1>
           

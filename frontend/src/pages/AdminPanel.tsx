@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Edit, Trash2, Upload, Save, X } from "lucide-react";
+import { Plus, Edit, Trash2, Upload, Save, X, Home } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 import NotFound from "@/pages/NotFound";
@@ -272,16 +272,13 @@ const AdminPanel = () => {
             <h1 className="text-3xl font-bold text-foreground">پنل مدیریت</h1>
             <p className="text-muted-foreground">مدیریت آثار هنری معصومه شاه رمضانی</p>
           </div>
-          <Button 
-            variant="persian" 
-            onClick={() => setIsEditing(true)}
-            disabled={loading}
-          >
-            <Plus className="ml-2 h-4 w-4" />
-            افزودن اثر جدید
-          </Button>
+          <a href="/">
+            <Button>
+              <Home className="ml-2 h-4 w-4" />
+                برگشت به خانـه
+            </Button>
+          </a>
         </div>
-
         <Tabs defaultValue="paintings" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="paintings">آثار هنری</TabsTrigger>
@@ -446,14 +443,21 @@ const AdminPanel = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="category">دسته‌بندی</Label>
-                    <Input
+                      <Label htmlFor="category">دسته‌بندی</Label>
+                      <select
                       id="category"
                       value={formData.category}
-                      onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                      placeholder="نقاشی، مجسمه، ..."
-                    />
+                      onChange={(e) =>
+                      setFormData((prev) => ({ ...prev, category: e.target.value }))
+                    }
+                      className="w-full rounded-md border px-3 py-2">
+                      <option value="همه">همه</option>
+                      <option value="معاصر">معاصر</option>
+                      <option value="انتزاعی">انتزائی</option>
+                      <option value="مینیمال">مینیمال</option>
+                    </select>
                   </div>
+
                   <div className="space-y-2">
                     <Label htmlFor="image">تصویر</Label>
                     <Input
